@@ -1,0 +1,43 @@
+import streamlit as st
+import numpy as np
+from main import *
+
+st.set_page_config(layout="wide")
+
+st.write("""
+         # Data Science Personal Project
+
+         ## Application for universities in Senegal with automatic keyword selection/indexing, using ***Python*** and ***Pandas Library***
+         project files : https://github.com/abd2re/university-sn-dataframe""")
+
+
+
+st.write("""Data cleansing done with jupyter and excel (pandas excel module)""")
+
+st.write("""University list from: https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/""")
+
+st.write("""The keyword selection has been done by the code algorithm""")
+
+
+st.write("""# Full dataframe""")
+st.dataframe(unis)
+
+st.write("""# Filterable dataframe""")
+val = st.selectbox('Choose',keyword_dict.items())
+kw = val[0]
+unis_filt = unis.copy()
+line = 0
+
+for i in unis_filt['keywords']:
+    for word in i:
+        if word == kw:
+            break
+    else:
+        unis_filt.drop(line,axis=0,inplace=True)
+
+    line += 1
+
+unis_filt = unis_filt.set_index(np.arange(1,val[1]+1))
+st.table(unis_filt.drop(['keywords_raw','keywords'],axis=1))
+
+
