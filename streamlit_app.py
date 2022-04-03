@@ -21,6 +21,7 @@ st.write("""The keyword selection has been done by the code algorithm""")
 
 st.write("""# Full dataframe""")
 st.dataframe(unis)
+st.write("""### Total: {}""".format(len(unis)))
 
 st.write("""# Filterable dataframe""")
 
