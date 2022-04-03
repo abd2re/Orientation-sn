@@ -44,6 +44,11 @@ try:#for streamlit
 except:
     pass
 
+
+
+unis["nom"] = unis["nom"].str.lower()
+unis["adresse"] = unis["adresse"].str.lower()
+unis["details"] = unis["details"].str.lower()
 keyword_series = pd.read_csv('keywordlist_cor.txt')
 details_mod = []
 for i in unis['details']:
