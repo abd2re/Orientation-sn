@@ -3,46 +3,45 @@
 import pandas as pd
 import requests
 
-try:#for streamlit
-    unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
-    url_link = 'https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/'
-    r = requests.get(url_link,headers ={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'})
-    unis = pd.read_html(r.text)[0]
-    unis = unis.transpose()
-    unis.drop(0,axis=1,inplace=True)
-    unis.set_index(1,inplace=True)
-    unis = unis.transpose()
-    unis.reset_index(inplace=True)
-    unis.drop('index',axis=1,inplace=True)
-    unis.columns = ['nom', 'adresse', 'details[1]', 'details']
-    unis.dropna(thresh=3,inplace=True)
-    unis.drop('details[1]',axis=1,inplace=True)
-    unis.to_excel('unis_output.xlsx')
-    unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
-    unis.drop('Unnamed: 0',axis=1,inplace=True)
-    unis["nom"] = unis["nom"].str.lower()
-    unis["adresse"] = unis["adresse"].str.lower()
-    unis["details"] = unis["details"].str.lower()
-    unis.fillna('',inplace=True)
-    keyword_list = []
-    for ndet in unis['details']:
-        ndet = ndet.replace(",","")
-        ndet = ndet.replace(".","")
-        ndet = ndet.replace("…","")
-        ndet = ndet.replace("’", " ")
-        ndet = ndet.replace("/", " ")
-        for i in set(ndet.split()):
-            if len(i) > 2:
-                keyword_list.append(i)
-    new_keyword_list=[]
-    for i in keyword_list:
-        if i[-1] == 's': i = i[:-1]
+unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
+url_link = 'https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/'
+r = requests.get(url_link,headers ={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'})
+unis = pd.read_html(r.text)[0]
+unis = unis.transpose()
+unis.drop(0,axis=1,inplace=True)
+unis.set_index(1,inplace=True)
+unis = unis.transpose()
+unis.reset_index(inplace=True)
+unis.drop('index',axis=1,inplace=True)
+unis.columns = ['nom', 'adresse', 'details[1]', 'details']
+unis.dropna(thresh=3,inplace=True)
+unis.drop('details[1]',axis=1,inplace=True)
+unis.to_excel('unis_output.xlsx')
+unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
+unis.drop('Unnamed: 0',axis=1,inplace=True)
+unis["nom"] = unis["nom"].str.lower()
+unis["adresse"] = unis["adresse"].str.lower()
+unis["details"] = unis["details"].str.lower()
+unis.fillna('',inplace=True)
+keyword_list = []
+for ndet in unis['details']:
+    ndet = ndet.replace(",","")
+    ndet = ndet.replace(".","")
+    ndet = ndet.replace("…","")
+    ndet = ndet.replace("’", " ")
+    ndet = ndet.replace("/", " ")
+    for i in set(ndet.split()):
         if len(i) > 2:
-            new_keyword_list.append(i)
-    keyword_series = pd.Series(new_keyword_list)
-    keyword_series.value_counts().to_csv('keywordlist')
-except:
-    pass
+            keyword_list.append(i)
+new_keyword_list=[]
+for i in keyword_list:
+    if i[-1] == 's': i = i[:-1]
+    if len(i) > 2:
+        new_keyword_list.append(i)
+keyword_series = pd.Series(new_keyword_list)
+keyword_series.value_counts().to_csv('keywordlist')
+
+
 
 
 
