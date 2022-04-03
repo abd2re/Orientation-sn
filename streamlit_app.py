@@ -37,7 +37,10 @@ for i in unis_filt['keywords']:
 
     line += 1
 
-unis_filt = unis_filt.set_index(np.arange(1,val[1]+1))
+try:
+    unis_filt = unis_filt.set_index(np.arange(1,val[1]+1))
+except:
+    unis_filt = unis_filt.set_index(np.arange(1,val[1]))
 st.table(unis_filt.drop(['keywords_raw','keywords'],axis=1))
 
 
