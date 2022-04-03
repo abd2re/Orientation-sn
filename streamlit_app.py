@@ -48,6 +48,8 @@ try:
     unis_filt = unis_filt.set_index(np.arange(1,val[1]+1))
 except:
     unis_filt = unis_filt.set_index(np.arange(1,val[1]))
+
+st.write("""### {} ({})""".format(kw,val[1]))
 st.table(unis_filt.drop(['keywords_raw','keywords'],axis=1))
 
 
