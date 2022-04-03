@@ -23,6 +23,13 @@ st.write("""# Full dataframe""")
 st.dataframe(unis)
 
 st.write("""# Filterable dataframe""")
+
+st.write("""***keywords auto-selected by frequency***""")
+arr = ''
+for i in keyword_dict:
+    arr = arr + ' ' + i + ','
+st.write('['+arr[1:-1]+']')
+
 val = st.selectbox('Choose',keyword_dict.items())
 kw = val[0]
 unis_filt = unis.copy()
