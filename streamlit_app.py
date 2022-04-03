@@ -8,7 +8,7 @@ st.write("""
          # Data Science Personal Project
 
          ## Application for universities in Senegal with automatic keyword selection/indexing, using ***Python*** and ***Pandas Library***
-         project files : https://github.com/abd2re/university-sn-dataframe""")
+         project files : https://github.com/abd2re/abd2re-university-sn-dataframe""")
 
 
 
