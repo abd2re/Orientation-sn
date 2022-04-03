@@ -19,12 +19,12 @@ unis.drop('details[1]',axis=1,inplace=True)
 unis.to_excel('unis_output.xlsx')
 unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
 unis.drop('Unnamed: 0',axis=1,inplace=True)
-unis["nom"] = unis["nom"].str.lower()
-unis["adresse"] = unis["adresse"].str.lower()
-unis["details"] = unis["details"].str.lower()
+unis["nom"] = unis["nom"]
+unis["adresse"] = unis["adresse"]
+unis["details"] = unis["details"]
 unis.fillna('',inplace=True)
 keyword_list = []
-for ndet in unis['details']:
+for ndet in unis['details'].str.lower():
     ndet = ndet.replace(",","")
     ndet = ndet.replace(".","")
     ndet = ndet.replace("…","")
@@ -42,12 +42,9 @@ keyword_series = pd.Series(new_keyword_list)
 keyword_series.value_counts().to_csv('keywordlist')
 
 
-
-
-
 keyword_series = pd.read_csv('keywordlist_cor.txt')
 details_mod = []
-for i in unis['details']:
+for i in unis['details'].str.lower():
     phrase = ''
     i = i.replace(",","")
     i = i.replace(".","")
