@@ -56,7 +56,13 @@ unis_filt.drop(['keywords_raw','keywords'],axis=1,inplace=True)
 
 
 def make_clickable(link):
-    text = link
+    try:
+        text = link.split('https://www.au-senegal.com/')[1]
+    except:
+        try:
+            text = link.split('www.')[1]
+        except:
+            text = link.split('//')[1]
     return f'<a target="_blank" href="{link}">{text}</a>'
 
 unis_filt['liens'] = unis_filt['liens'].apply(make_clickable)
