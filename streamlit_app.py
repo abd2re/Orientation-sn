@@ -23,7 +23,7 @@ st.write("""Liste des universites au Senegal""")
 st.dataframe(unis)
 st.write("""### Total: {}""".format(len(unis)))
 
-st.write("""# Filterable dataframe""")
+#st.write("""# Filterable dataframe""")
 
 #st.write("""***keywords auto-selected by frequency***""")
 arr = ''
