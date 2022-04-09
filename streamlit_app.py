@@ -14,7 +14,7 @@ st.set_page_config(layout="wide")
 
 st.write("""Liste des universites au Senegal""")
 
-#st.write("""University list from: https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/""")
+st.write(""" list de: https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/""")
 
 #st.write("""The keyword selection has been done by the code algorithm""")
 
