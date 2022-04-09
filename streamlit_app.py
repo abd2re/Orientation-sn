@@ -4,32 +4,32 @@ from main import *
 
 st.set_page_config(layout="wide")
 
-#st.write("""
+st.write("""
          # Data Science Personal Project
 
          ## Application for universities in Senegal with automatic keyword selection/indexing, using ***Python*** and ***Pandas Library***
-         #project files : https://github.com/abd2re/abd2re-university-sn-dataframe""")
+         project files : https://github.com/abd2re/abd2re-university-sn-dataframe""")
 
 
 
-st.write("""Liste des universites au Senegal""")
+st.write("""Data cleansing done with jupyter and excel (pandas excel module)""")
 
-st.write(""" list de: https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/""")
+st.write("""University list from: https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/""")
 
-#st.write("""The keyword selection has been done by the code algorithm""")
+st.write("""The keyword selection has been done by the code algorithm""")
 
 
-#st.write("""# Full dataframe""")
+st.write("""# Full dataframe""")
 st.dataframe(unis)
 st.write("""### Total: {}""".format(len(unis)))
 
-#st.write("""# Filterable dataframe""")
+st.write("""# Filterable dataframe""")
 
-#st.write("""***keywords auto-selected by frequency***""")
+st.write("""***keywords auto-selected by frequency***""")
 arr = ''
-#for i in keyword_dict:
-#    arr = arr + ' ' + i + ','
-#st.write('['+arr[1:-1]+']')
+for i in keyword_dict:
+    arr = arr + ' ' + i + ','
+st.write('['+arr[1:-1]+']')
 
 val = st.selectbox('Choose',keyword_dict.items())
 kw = val[0]
@@ -50,7 +50,25 @@ try:
 except:
     unis_filt = unis_filt.set_index(np.arange(1,val[1]))
 
+
 st.write("""### {} ({})""".format(kw,val[1]))
-st.table(unis_filt.drop(['keywords_raw','keywords'],axis=1))
+unis_filt.drop(['keywords_raw','keywords'],axis=1,inplace=True)
+
+
+def make_clickable(link):
+    text = link
+    return f'<a target="_blank" href="{link}">{text}</a>'
+
+unis_filt['liens'] = unis_filt['liens'].apply(make_clickable)
+unis_filt = unis_filt.to_html(escape=False)
+
+st.write(unis_filt, unsafe_allow_html=True)
+
+
+
+
+
+
+
 
 
