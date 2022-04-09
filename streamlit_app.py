@@ -4,32 +4,32 @@ from main import *
 
 st.set_page_config(layout="wide")
 
-st.write("""
+#st.write("""
          # Data Science Personal Project
 
          ## Application for universities in Senegal with automatic keyword selection/indexing, using ***Python*** and ***Pandas Library***
-         project files : https://github.com/abd2re/abd2re-university-sn-dataframe""")
+         #project files : https://github.com/abd2re/abd2re-university-sn-dataframe""")
 
 
 
-st.write("""Data cleansing done with jupyter and excel (pandas excel module)""")
+st.write("""Liste des universites au Senegal""")
 
-st.write("""University list from: https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/""")
+#st.write("""University list from: https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/""")
 
-st.write("""The keyword selection has been done by the code algorithm""")
+#st.write("""The keyword selection has been done by the code algorithm""")
 
 
-st.write("""# Full dataframe""")
+#st.write("""# Full dataframe""")
 st.dataframe(unis)
 st.write("""### Total: {}""".format(len(unis)))
 
 st.write("""# Filterable dataframe""")
 
-st.write("""***keywords auto-selected by frequency***""")
+#st.write("""***keywords auto-selected by frequency***""")
 arr = ''
-for i in keyword_dict:
-    arr = arr + ' ' + i + ','
-st.write('['+arr[1:-1]+']')
+#for i in keyword_dict:
+#    arr = arr + ' ' + i + ','
+#st.write('['+arr[1:-1]+']')
 
 val = st.selectbox('Choose',keyword_dict.items())
 kw = val[0]
