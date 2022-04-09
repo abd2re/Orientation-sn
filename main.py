@@ -2,6 +2,8 @@
 # coding: utf-8
 import pandas as pd
 import requests
+from googlesearch import search
+import os
 
 unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
 url_link = 'https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/'
@@ -68,6 +70,16 @@ for i in unis['keywords_raw']:
 
 unis['keywords'] = keywords
 unis.drop([89,90,91,92,93,94],axis=0,inplace=True)
+links = []
+
+if os.path.exists('unis_links') == False:
+    for i in unis['nom']:
+        query = i
+        for j in search(query, tld="sn", stop=1):
+            links.append(j)
+    unis['liens'].to_csv('unis_links')
+
+unis['liens'] = pd.read_csv('unis_links')['liens']
 
 keyword_dict = dict(zip(keyword_series['keyword'],keyword_series['count']))
 
