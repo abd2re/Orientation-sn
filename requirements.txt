@@ -6,3 +6,4 @@ requests==2.26.0
 openpyxl==3.0.9
 click<=8.0.4
 lxml==4.8.0
+google=3.0.0
