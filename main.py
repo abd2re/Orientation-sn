@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
 import pandas as pd
 import requests
 from googlesearch import search
@@ -74,16 +72,17 @@ links = []
 
 if os.path.exists('unis_links') == False:
     for i in unis['nom']:
-        query = i
+        query = i + ' senegal'
         for j in search(query, tld="sn", stop=1):
             links.append(j)
+    unis['liens'] = links
     unis['liens'].to_csv('unis_links')
 
 unis['liens'] = pd.read_csv('unis_links')['liens']
 
 keyword_dict = dict(zip(keyword_series['keyword'],keyword_series['count']))
 
-
+print(unis)
 
 
 
