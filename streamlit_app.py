@@ -139,18 +139,17 @@ def user():
 
 
 
-with st.sidebar:
-    selected = option_menu(
-        menu_icon=None,
-        menu_title='Orientation SN',
-        options=["Home", 'User'],
-        icons=['house', 'cloud-upload'],
-        )
+
+selected = option_menu(
+    menu_title=None,
+    options=["Home", 'User'],
+    icons=['house', 'cloud-upload'],
+    orientation='horizontal'
+    )
 
 
 if selected == "Home":
     main()
 if selected == "User":
     user()
-
 
