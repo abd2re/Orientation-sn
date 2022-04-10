@@ -18,13 +18,6 @@ def make_clickable(link):
 
 
 def main():
-    st.sidebar.write("""# Hide:""")
-    adresse = st.sidebar.checkbox('adresse')
-    details = st.sidebar.checkbox('details')
-    liens = st.sidebar.checkbox('liens')
-    keywords = st.sidebar.checkbox('keywords')
-    toggle_list = [adresse,details,liens,keywords]
-    filt_list = list(compress(['adresse','details','liens','keywords'], toggle_list))
     st.write("""
             # Orientation SN
 
@@ -68,16 +61,27 @@ def main():
 
 
     st.write("""### {} ({})""".format(kw,val[1]))
+    col1, col2, col3, col4, col5, space = st.columns([0.5,1,1,1,1,16-5])
+    with col1:
+        st.write("""Hide:""")
+    with col2:
+        adresse = st.checkbox('adresse')
+    with col3:
+        details = st.checkbox('details')
+    with col4:
+         liens = st.checkbox('liens')
+    with col5:
+        keywords = st.checkbox('keywords')
+    with space:
+        pass
+    toggle_list = [adresse,details,liens,keywords]
+    filt_list = list(compress(['adresse','details','liens','keywords'], toggle_list))
     unis_filt.drop(['keywords_raw']+filt_list,axis=1,inplace=True)
     if toggle_list[2] == False:
         unis_filt['liens'] = unis_filt['liens'].apply(make_clickable)
     unis_filt = unis_filt.to_html(escape=False)
-
     st.write(unis_filt, unsafe_allow_html=True)
-
     st.write("""# Full dataframe""")
-    st.dataframe(unis)
-    st.write("""### Total: {}""".format(len(unis)))
 
 def user():
     st.write("""# User customization""")
@@ -87,10 +91,17 @@ def user():
     unis_overall = []
 
     if len(kws) > 0:
-        st.sidebar.write("""# Hide:""")
-        adresse = st.sidebar.checkbox('adresse')
-        details = st.sidebar.checkbox('details')
-        liens = st.sidebar.checkbox('liens')
+        col1, col2, col3, col4, space = st.columns([0.6,1,1,1,16-4])
+        with col1:
+            st.write("""Hide:""")
+        with col2:
+            adresse = st.checkbox('adresse')
+        with col3:
+            details = st.checkbox('details')
+        with col4:
+             liens = st.checkbox('liens')
+        with space:
+            pass
         toggle_list = [adresse,details,liens]
         filt_list = list(compress(['adresse','details','liens'], toggle_list))
         for elem in kws:
@@ -139,13 +150,13 @@ def user():
 
 
 
-
-selected = option_menu(
-    menu_title=None,
-    options=["Home", 'User'],
-    icons=['house', 'cloud-upload'],
-    orientation='horizontal'
-    )
+with st.sidebar:
+    selected = option_menu(
+        menu_title='Orientation SN',
+        options=["Home", 'User'],
+        icons=['house', 'cloud-upload'],
+        menu_icon='wifi'
+        )
 
 
 if selected == "Home":
