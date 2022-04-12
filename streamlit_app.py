@@ -156,14 +156,14 @@ def user():
         else:
             unis_merged.drop('frequence',inplace=True,axis=1)
             unis_merged.insert(3,'frequence',points)
+            temp_freq_values = pd.DataFrame(freq_values).transpose().dropna().values.tolist()
+            temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
+            unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
         for i in unis_merged['frequence']:
             if i == len(kws):
                 break
         else:
             st.write("*No matches for these subjects*")
-        temp_freq_values = pd.DataFrame(freq_values).transpose().dropna().values.tolist()
-        temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
-        unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
         unis_merged.sort_values(by='frequence', ascending=False,inplace=True)
         unis_merged.drop(['keywords','keywords_raw']+filt_list,axis=1,inplace=True)
         unis_merged_xlsx = to_excel(unis_merged.drop('frequence',axis=1))
