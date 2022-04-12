@@ -81,7 +81,6 @@ def main():
         unis_filt['liens'] = unis_filt['liens'].apply(make_clickable)
     unis_filt = unis_filt.to_html(escape=False)
     st.write(unis_filt, unsafe_allow_html=True)
-    st.write("""# Full dataframe""")
 
 def user():
     st.write("""# User customization""")
