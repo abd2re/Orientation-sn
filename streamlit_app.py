@@ -3,6 +3,9 @@ import numpy as np
 from main import *
 from streamlit_option_menu import option_menu
 from itertools import compress
+from io import BytesIO
+from pyxlsb import open_workbook as open_xlsb
+
 st.set_page_config(page_title="Universties Senegal",layout="wide")
 
 def make_clickable(link):
@@ -14,6 +17,18 @@ def make_clickable(link):
         except:
             text = link.split('//')[1]
     return f'<a target="_blank" href="{link}">{text}</a>'
+
+def to_excel(df):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+    workbook = writer.book
+    worksheet = writer.sheets['Sheet1']
+    format1 = workbook.add_format({'num_format': '0.00'})
+    worksheet.set_column('A:A', None, format1)
+    writer.save()
+    processed_data = output.getvalue()
+    return processed_data
 
 
 
@@ -135,31 +150,48 @@ def user():
             freq_values.append(temp_values)
 
         unis_merged.insert(3,'frequence',points)
+        show_only = st.checkbox('Show only universities with all selected courses')
+        if show_only == True:
+            unis_merged = unis_merged[unis_merged['frequence'] == len(kws)]
+        else:
+            unis_merged.drop('frequence',inplace=True,axis=1)
+            unis_merged.insert(3,'frequence',points)
+        for i in unis_merged['frequence']:
+            if i == len(kws):
+                break
+        else:
+            st.write("*No matches for these subjects*")
         temp_freq_values = pd.DataFrame(freq_values).transpose().dropna().values.tolist()
         temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
-        unis_merged.insert(4,'selection',temp_freq_values)
+        unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
         unis_merged.sort_values(by='frequence', ascending=False,inplace=True)
         unis_merged.drop(['keywords','keywords_raw']+filt_list,axis=1,inplace=True)
+        unis_merged_xlsx = to_excel(unis_merged)
+        st.download_button(label='Download Current table of data',data=unis_merged_xlsx ,file_name= 'unversites_user.xlsx')
         if toggle_list[2] == False:
             unis_merged['liens'] = unis_merged['liens'].apply(make_clickable)
         unis_merged['frequence'] = unis_merged['frequence'].apply(lambda x: str(int(x))+'/'+str(len(kws)))
         unis_merged.set_index(np.arange(1,len(unis_merged)+1),inplace=True)
-        unis_merged = unis_merged.to_html(escape=False)
-        st.write(unis_merged, unsafe_allow_html=True)
+        unis_merged_html = unis_merged.to_html(escape=False)
+        st.write(unis_merged_html, unsafe_allow_html=True)
+
 
 
 
 with st.sidebar:
     selected = option_menu(
         menu_title='Orientation SN',
-        options=["Home", 'User'],
+        options=["User", 'Info'],
         icons=['house', 'cloud-upload'],
-        menu_icon='wifi'
+        menu_icon='wifi',
+        default_index=1
         )
 
 
-if selected == "Home":
-    main()
+
 if selected == "User":
     user()
+if selected == "Info":
+    main()
+
 
