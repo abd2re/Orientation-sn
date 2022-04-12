@@ -184,7 +184,7 @@ with st.sidebar:
         options=["User", 'Info'],
         icons=['house', 'cloud-upload'],
         menu_icon='wifi',
-        default_index=1
+        default_index=0
         )
 
 
