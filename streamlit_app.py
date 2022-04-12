@@ -166,8 +166,8 @@ def user():
         unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
         unis_merged.sort_values(by='frequence', ascending=False,inplace=True)
         unis_merged.drop(['keywords','keywords_raw']+filt_list,axis=1,inplace=True)
-        unis_merged_xlsx = to_excel(unis_merged)
-        st.download_button(label='Download Current table of data',data=unis_merged_xlsx ,file_name= 'unversites_user.xlsx')
+        unis_merged_xlsx = to_excel(unis_merged.drop('frequence',axis=1))
+        st.download_button(label='Download Current table of data',data=unis_merged_xlsx ,file_name= f'unversites_user{kws}.xlsx')
         if toggle_list[2] == False:
             unis_merged['liens'] = unis_merged['liens'].apply(make_clickable)
         unis_merged['frequence'] = unis_merged['frequence'].apply(lambda x: str(int(x))+'/'+str(len(kws)))
