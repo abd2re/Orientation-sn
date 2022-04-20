@@ -5,6 +5,12 @@ from streamlit_option_menu import option_menu
 from itertools import compress
 from io import BytesIO
 from pyxlsb import open_workbook as open_xlsb
+import nltk
+import simplemma as splm
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise  import cosine_similarity
 
 st.set_page_config(page_title="Universties Senegal",layout="wide")
 
@@ -131,16 +137,16 @@ def user():
                 line += 1
             itera+=1
             unis_overall.append(unis_perso)
-        unis_merged = pd.concat(unis_overall)
-        unis_merged.drop_duplicates(subset='nom',inplace=True)
+        unis_vect_chose = pd.concat(unis_overall)
+        unis_vect_chose.drop_duplicates(subset='nom',inplace=True)
 
-        points = np.zeros(len(unis_merged))
+        points = np.zeros(len(unis_vect_chose))
         freq_values = []
 
         for elem in kws:
             count = 0
             temp_values = []
-            for i in unis_merged['keywords']:
+            for i in unis_vect_chose['keywords']:
                 if elem in i:
                     points[count] += 1
                     temp_values.append(elem)
@@ -149,40 +155,107 @@ def user():
                 count +=1
             freq_values.append(temp_values)
 
-        unis_merged.insert(3,'frequence',points)
+        unis_vect_chose.insert(3,'frequence',points)
         show_only = st.checkbox('Show only universities with all selected courses')
         if show_only == True:
-            unis_merged = unis_merged[unis_merged['frequence'] == len(kws)]
+            unis_vect_chose = unis_vect_chose[unis_vect_chose['frequence'] == len(kws)]
         else:
-            unis_merged.drop('frequence',inplace=True,axis=1)
-            unis_merged.insert(3,'frequence',points)
+            unis_vect_chose.drop('frequence',inplace=True,axis=1)
+            unis_vect_chose.insert(3,'frequence',points)
             temp_freq_values = pd.DataFrame(freq_values).transpose().dropna().values.tolist()
             temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
-            unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
-        for i in unis_merged['frequence']:
+            unis_vect_chose.insert(4,'selection',temp_freq_values[:len(unis_vect_chose['frequence'])])
+        for i in unis_vect_chose['frequence']:
             if i == len(kws):
                 break
         else:
             st.write("*No matches for these subjects*")
-        unis_merged.sort_values(by='frequence', ascending=False,inplace=True)
-        unis_merged.drop(['keywords','keywords_raw']+filt_list,axis=1,inplace=True)
-        unis_merged_xlsx = to_excel(unis_merged.drop('frequence',axis=1))
-        st.download_button(label='Download Current table of data',data=unis_merged_xlsx ,file_name= f'unversites_user{kws}.xlsx')
+        unis_vect_chose.sort_values(by='frequence', ascending=False,inplace=True)
+        unis_vect_chose.drop(['keywords','keywords_raw']+filt_list,axis=1,inplace=True)
+        unis_vect_chose_xlsx = to_excel(unis_vect_chose.drop('frequence',axis=1))
+        st.download_button(label='Download Current table of data',data=unis_vect_chose_xlsx ,file_name= f'unversites_user{kws}.xlsx')
         if toggle_list[2] == False:
-            unis_merged['liens'] = unis_merged['liens'].apply(make_clickable)
-        unis_merged['frequence'] = unis_merged['frequence'].apply(lambda x: str(int(x))+'/'+str(len(kws)))
-        unis_merged.set_index(np.arange(1,len(unis_merged)+1),inplace=True)
-        unis_merged_html = unis_merged.to_html(escape=False)
-        st.write(unis_merged_html, unsafe_allow_html=True)
+            unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
+        unis_vect_chose['frequence'] = unis_vect_chose['frequence'].apply(lambda x: str(int(x))+'/'+str(len(kws)))
+        unis_vect_chose.set_index(np.arange(1,len(unis_vect_chose)+1),inplace=True)
+        unis_vect_chose_html = unis_vect_chose.to_html(escape=False)
+        st.write(unis_vect_chose_html, unsafe_allow_html=True)
 
 
+def similar():
+    st.write("""# Similar Universities""")
+
+    langdata = splm.load_data('fr')
+    stop_words = set(stopwords.words('french'))
+
+    unvect = []
+
+    for i in unis['details']:
+        word_tokens = word_tokenize(i)
+        filtered_sentence = []
+        for w in word_tokens:
+            if w not in stop_words and len(w)>1:
+                filtered_sentence.append(splm.lemmatize(w, langdata))
+
+        sent = ' '.join(filtered_sentence)
+        unvect.append(sent)
+
+    unis['unvectored'] = unvect
+    unis['unvectored'].mask(unis['unvectored'] == '',inplace=True)
+    unis_vect= unis.dropna().reset_index().drop('index',axis=1).copy()
+
+
+    def similarity(x,y):
+        vectorizer = TfidfVectorizer()
+        data = vectorizer.fit_transform([unis_vect['unvectored'][x],unis_vect['unvectored'][y]])
+        features = vectorizer.get_feature_names()
+        dense = data.todense()
+        denselist = dense.tolist()
+        return cosine_similarity([denselist[0]],[denselist[1]])[0][0]
+
+    similarity_df = []
+
+    for i in range(len(unis_vect)):
+        similarity_data = []
+        for j in range(len(unis_vect)):
+            similarity_data.append(similarity(i,j))
+        similarity_df.append(similarity_data)
+
+    similarity_fulldf = pd.DataFrame(similarity_df).transpose()
+
+    val = pd.Series(unis_vect.index,unis_vect['nom']).to_dict()
+    choose = st.selectbox('Choose University',val)
+    i = val[choose]
+    unis_vect_chose = unis_vect.loc[similarity_fulldf[i][(similarity_fulldf[i]>0) & (similarity_fulldf[i]<1)].sort_values(ascending=False).head(5).index]
+
+    col1, col2, col3, col4, space = st.columns([0.6,1,1,1,16-4])
+    with col1:
+        st.write("""Hide:""")
+    with col2:
+        adresse = st.checkbox('adresse')
+    with col3:
+        details = st.checkbox('details')
+    with col4:
+         liens = st.checkbox('liens')
+    with space:
+        pass
+    toggle_list = [adresse,details,liens]
+    filt_list = list(compress(['adresse','details','liens'], toggle_list))
+
+    unis_vect_chose.drop(['keywords','keywords_raw','unvectored']+filt_list,axis=1,inplace=True)
+    if toggle_list[2] == False:
+        unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
+    unis_vect_chose.set_index(np.arange(1,len(unis_vect_chose)+1),inplace=True)
+    unis_vect_chose_html = unis_vect_chose.to_html(escape=False)
+    st.write(f'5 similar universities to {choose}')
+    st.write(unis_vect_chose_html, unsafe_allow_html=True)
 
 
 with st.sidebar:
     selected = option_menu(
         menu_title='Orientation SN',
-        options=["User", 'Info'],
-        icons=['house', 'cloud-upload'],
+        options=["User", 'Similar Universities', 'Info'],
+        icons=['house', 'cloud-upload','water'],
         menu_icon='wifi',
         default_index=0
         )
@@ -191,7 +264,10 @@ with st.sidebar:
 
 if selected == "User":
     user()
+if selected == "Similar Universities":
+    similar()
 if selected == "Info":
     main()
+
 
 
