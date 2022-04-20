@@ -6,6 +6,8 @@ from itertools import compress
 from io import BytesIO
 from pyxlsb import open_workbook as open_xlsb
 import nltk
+nltk.download('corpus')
+nltk.download('tokenize')
 import simplemma as splm
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
