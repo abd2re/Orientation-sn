@@ -10,3 +10,6 @@ google==3.0.0
 streamlit_option_menu==0.3.2
 pyxlsb==1.0.9
 XlsxWriter==3.0.3
+nltk==3.7
+scikit-learn==0.20
+simplemma==0.6.0
