@@ -244,7 +244,7 @@ def similar():
         st.write(unis_vect_chose_html, unsafe_allow_html=True)
     else:
         st.write('No similar universities found')
-
+        unis_vect_chose.drop(['keywords','keywords_raw','unvectored']+filt_list,axis=1,inplace=True)
 
 
 with st.sidebar:
