@@ -180,10 +180,7 @@ def user():
         unis_merged_html = unis_merged.to_html(escape=False)
         st.write(unis_merged_html, unsafe_allow_html=True)
 
-
 def similar():
-    st.write("""# Similar Universities""")
-
     langdata = splm.load_data('fr')
     stop_words = set(stopwords.words('french'))
 
@@ -203,28 +200,18 @@ def similar():
     unis['unvectored'].mask(unis['unvectored'] == '',inplace=True)
     unis_vect= unis.dropna().reset_index().drop('index',axis=1).copy()
 
+    vectorizer = TfidfVectorizer()
+    data = vectorizer.fit_transform(unis_vect['unvectored'].to_list())
+    features = vectorizer.get_feature_names()
+    dense = data.todense()
+    denselist = dense.tolist()
 
-    def similarity(x,y):
-        vectorizer = TfidfVectorizer()
-        data = vectorizer.fit_transform([unis_vect['unvectored'][x],unis_vect['unvectored'][y]])
-        features = vectorizer.get_feature_names()
-        dense = data.todense()
-        denselist = dense.tolist()
-        return cosine_similarity([denselist[0]],[denselist[1]])[0][0]
-
-    similarity_df = []
-
-    for i in range(len(unis_vect)):
-        similarity_data = []
-        for j in range(len(unis_vect)):
-            similarity_data.append(similarity(i,j))
-        similarity_df.append(similarity_data)
-
-    similarity_fulldf = pd.DataFrame(similarity_df).transpose()
+    similarity_fulldf = pd.DataFrame(cosine_similarity(denselist))
 
     val = pd.Series(unis_vect.index,unis_vect['nom']).to_dict()
     choose = st.selectbox('Choose University',val)
     i = val[choose]
+    unis_vect['cos_sim score'] = similarity_fulldf[i]
     unis_vect_chose = unis_vect.loc[similarity_fulldf[i][(similarity_fulldf[i]>0) & (similarity_fulldf[i]<1)].sort_values(ascending=False).head(5).index]
 
     col1, col2, col3, col4, space = st.columns([0.6,1,1,1,16-4])
@@ -248,6 +235,7 @@ def similar():
     unis_vect_chose_html = unis_vect_chose.to_html(escape=False)
     st.write(f'5 similar universities to {choose}')
     st.write(unis_vect_chose_html, unsafe_allow_html=True)
+
 
 
 with st.sidebar:
