@@ -110,7 +110,6 @@ def user():
     kws = options
     itera = 0
     unis_overall = []
-
     if len(kws) > 0:
         col1, col2, col3, col4, space = st.columns([0.6,1,1,1,16-4])
         with col1:
@@ -134,20 +133,17 @@ def user():
                         break
                 else:
                     unis_perso.drop(line,axis=0,inplace=True)
-
                 line += 1
             itera+=1
             unis_overall.append(unis_perso)
-        unis_vect_chose = pd.concat(unis_overall)
-        unis_vect_chose.drop_duplicates(subset='nom',inplace=True)
-
-        points = np.zeros(len(unis_vect_chose))
+        unis_merged = pd.concat(unis_overall)
+        unis_merged.drop_duplicates(subset='nom',inplace=True)
+        points = np.zeros(len(unis_merged))
         freq_values = []
-
         for elem in kws:
             count = 0
             temp_values = []
-            for i in unis_vect_chose['keywords']:
+            for i in unis_merged['keywords']:
                 if elem in i:
                     points[count] += 1
                     temp_values.append(elem)
@@ -155,32 +151,34 @@ def user():
                     temp_values.append('')
                 count +=1
             freq_values.append(temp_values)
-
-        unis_vect_chose.insert(3,'frequence',points)
+        unis_merged.insert(3,'frequence',points)
         show_only = st.checkbox('Show only universities with all selected courses')
         if show_only == True:
-            unis_vect_chose = unis_vect_chose[unis_vect_chose['frequence'] == len(kws)]
+            unis_merged = unis_merged[unis_merged['frequence'] == len(kws)]
         else:
-            unis_vect_chose.drop('frequence',inplace=True,axis=1)
-            unis_vect_chose.insert(3,'frequence',points)
+            unis_merged.drop('frequence',inplace=True,axis=1)
+            unis_merged.insert(3,'frequence',points)
             temp_freq_values = pd.DataFrame(freq_values).transpose().dropna().values.tolist()
             temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
-            unis_vect_chose.insert(4,'selection',temp_freq_values[:len(unis_vect_chose['frequence'])])
-        for i in unis_vect_chose['frequence']:
+            unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
+        for i in unis_merged['frequence']:
             if i == len(kws):
                 break
         else:
             st.write("*No matches for these subjects*")
-        unis_vect_chose.sort_values(by='frequence', ascending=False,inplace=True)
-        unis_vect_chose.drop(['keywords','keywords_raw']+filt_list,axis=1,inplace=True)
-        unis_vect_chose_xlsx = to_excel(unis_vect_chose.drop('frequence',axis=1))
-        st.download_button(label='Download Current table of data',data=unis_vect_chose_xlsx ,file_name= f'unversites_user{kws}.xlsx')
+        temp_freq_values = pd.DataFrame(freq_values).transpose().dropna().values.tolist()
+        temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
+        unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
+        unis_merged.sort_values(by='frequence', ascending=False,inplace=True)
+        unis_merged.drop(['keywords','keywords_raw']+filt_list,axis=1,inplace=True)
+        unis_merged_xlsx = to_excel(unis_merged.drop('frequence',axis=1))
+        st.download_button(label='Download Current table of data',data=unis_merged_xlsx ,file_name= f'unversites_user{kws}.xlsx')
         if toggle_list[2] == False:
-            unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
-        unis_vect_chose['frequence'] = unis_vect_chose['frequence'].apply(lambda x: str(int(x))+'/'+str(len(kws)))
-        unis_vect_chose.set_index(np.arange(1,len(unis_vect_chose)+1),inplace=True)
-        unis_vect_chose_html = unis_vect_chose.to_html(escape=False)
-        st.write(unis_vect_chose_html, unsafe_allow_html=True)
+            unis_merged['liens'] = unis_merged['liens'].apply(make_clickable)
+        unis_merged['frequence'] = unis_merged['frequence'].apply(lambda x: str(int(x))+'/'+str(len(kws)))
+        unis_merged.set_index(np.arange(1,len(unis_merged)+1),inplace=True)
+        unis_merged_html = unis_merged.to_html(escape=False)
+        st.write(unis_merged_html, unsafe_allow_html=True)
 
 
 def similar():
