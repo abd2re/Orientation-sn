@@ -212,29 +212,37 @@ def similar():
     choose = st.selectbox('Choose University',val)
     i = val[choose]
     unis_vect['cos_sim score'] = similarity_fulldf[i]
-    unis_vect_chose = unis_vect.loc[similarity_fulldf[i][(similarity_fulldf[i]>0) & (similarity_fulldf[i]<1)].sort_values(ascending=False).head(5).index]
+    unis_vect_chose = unis_vect.loc[similarity_fulldf[i][(similarity_fulldf[i]>0.56) & (similarity_fulldf[i]<1)].sort_values(ascending=False).index]
 
-    col1, col2, col3, col4, space = st.columns([0.6,1,1,1,16-4])
-    with col1:
-        st.write("""Hide:""")
-    with col2:
-        adresse = st.checkbox('adresse')
-    with col3:
-        details = st.checkbox('details')
-    with col4:
-         liens = st.checkbox('liens')
-    with space:
-        pass
-    toggle_list = [adresse,details,liens]
-    filt_list = list(compress(['adresse','details','liens'], toggle_list))
+    st.write('Details: ' + unis_vect.loc[i,'details'])
 
-    unis_vect_chose.drop(['keywords','keywords_raw','unvectored']+filt_list,axis=1,inplace=True)
-    if toggle_list[2] == False:
-        unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
-    unis_vect_chose.set_index(np.arange(1,len(unis_vect_chose)+1),inplace=True)
-    unis_vect_chose_html = unis_vect_chose.to_html(escape=False)
-    st.write(f'5 similar universities to {choose}')
-    st.write(unis_vect_chose_html, unsafe_allow_html=True)
+    if len(unis_vect_chose) >0:
+
+        col1, col2, col3, col4, space = st.columns([0.6,1,1,1,16-4])
+        with col1:
+            st.write("""Hide:""")
+        with col2:
+            adresse = st.checkbox('adresse')
+        with col3:
+            details = st.checkbox('details')
+        with col4:
+            liens = st.checkbox('liens')
+        with space:
+            pass
+        toggle_list = [adresse,details,liens]
+        filt_list = list(compress(['adresse','details','liens'], toggle_list))
+
+        unis_vect_chose.drop(['keywords','keywords_raw','unvectored']+filt_list,axis=1,inplace=True)
+        if toggle_list[2] == False:
+            unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
+        unis_vect_chose.set_index(np.arange(1,len(unis_vect_chose)+1),inplace=True)
+        unis_vect_chose_html = unis_vect_chose.to_html(escape=False)
+        unis_vect_xlsx = to_excel(unis_vect.drop('unvectored',axis=1))
+        st.download_button(label='Download Current table of data',data=unis_vect_xlsx ,file_name= f'similar_universities_{choose}.xlsx')
+        st.write(f'Similar universities to {choose}')
+        st.write(unis_vect_chose_html, unsafe_allow_html=True)
+    else:
+        st.write('No similar universities found')
 
 
 
