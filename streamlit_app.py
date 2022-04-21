@@ -200,6 +200,7 @@ def similar():
     unis['unvectored'] = unvect
     unis['unvectored'].mask(unis['unvectored'] == '',inplace=True)
     unis_vect= unis.dropna().reset_index().drop('index',axis=1).copy()
+    unis.drop('unvectored',axis=1,inplace=True)
 
     vectorizer = TfidfVectorizer()
     data = vectorizer.fit_transform(unis_vect['unvectored'].to_list())
@@ -244,7 +245,7 @@ def similar():
         st.write(unis_vect_chose_html, unsafe_allow_html=True)
     else:
         st.write('No similar universities found')
-        unis_vect_chose.drop(['keywords','keywords_raw','unvectored']+filt_list,axis=1,inplace=True)
+
 
 
 with st.sidebar:
