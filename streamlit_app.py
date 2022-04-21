@@ -26,6 +26,14 @@ def make_clickable(link):
     return f'<a target="_blank" href="{link}">{text}</a>'
 
 def to_excel(df):
+    """converts dataframe to excel file
+
+    Args:
+        df: dataframe
+
+    Returns:
+        excel file
+    """
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
     df.to_excel(writer, index=False, sheet_name='Sheet1')
