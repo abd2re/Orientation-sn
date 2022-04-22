@@ -222,7 +222,7 @@ def similar():
     choose = st.selectbox('Search University',val)
     i = val[choose]
     unis_vect['cos_sim score'] = similarity_fulldf[i]
-    unis_vect_chose = unis_vect.loc[similarity_fulldf[i][(similarity_fulldf[i]>0.56) & (similarity_fulldf[i]<=1.1)].sort_values(ascending=False).index]
+    unis_vect_chose = unis_vect.loc[similarity_fulldf[i][similarity_fulldf[i]>0.56].sort_values(ascending=False).index]
 
     st.write('Details: ' + unis_vect.loc[i,'details'])
 
