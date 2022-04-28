@@ -248,9 +248,9 @@ def similar():
         unis_vect_chose.drop(['keywords','keywords_raw','unvectored']+filt_list,axis=1,inplace=True)
         if toggle_list[2] == False:
             unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
+        unis_vect_xlsx = to_excel(unis_vect_chose)
         unis_vect_chose.set_index(np.arange(1,len(unis_vect_chose)+1),inplace=True)
         unis_vect_chose_html = unis_vect_chose.to_html(escape=False)
-        unis_vect_xlsx = to_excel(unis_vect_chose)
         st.download_button(label='Download Current table of data',data=unis_vect_xlsx ,file_name= f'similar_universities_{choose}.xlsx')
         st.write(f'Similar universities to {choose}')
         st.write(unis_vect_chose_html, unsafe_allow_html=True)
