@@ -217,6 +217,9 @@ def similar():
     denselist = dense.tolist()
 
     similarity_fulldf = pd.DataFrame(cosine_similarity(denselist))
+    for i in range(len(similarity_fulldf)):
+        similarity_fulldf.loc[i,i] -=1
+
 
     val = pd.Series(unis_vect.index,unis_vect['nom']).to_dict()
     choose = st.selectbox('Search University',val)
