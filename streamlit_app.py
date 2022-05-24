@@ -113,25 +113,23 @@ def main():
     st.write(unis_filt, unsafe_allow_html=True)
 
 def user():
-    st.write("""# User customization""")
+    st.write("""# Cherchez des univérsités qui vous conviennent""")
     options = st.multiselect('Choisi tes sujets:',list(keyword_dict.keys()))
     kws = options
     itera = 0
     unis_overall = []
     if len(kws) > 0:
-        col1, col2, col3, col4, space = st.columns([0.6,1,1,1,16-4])
+        col1, col2, col3, space = st.columns([0.6,1,1,16-4])
         with col1:
-            st.write("""Hide:""")
+            st.write("""Cacher:""")
         with col2:
             adresse = st.checkbox('adresse')
         with col3:
             details = st.checkbox('details')
-        with col4:
-             liens = st.checkbox('liens')
         with space:
             pass
-        toggle_list = [adresse,details,liens]
-        filt_list = list(compress(['adresse','details','liens'], toggle_list))
+        toggle_list = [adresse,details]
+        filt_list = list(compress(['adresse','details'], toggle_list))
         for elem in kws:
             line = 0
             unis_perso = unis.copy()
@@ -160,7 +158,7 @@ def user():
                 count +=1
             freq_values.append(temp_values)
         unis_merged.insert(3,'frequence',points)
-        show_only = st.checkbox('Show only universities with all selected courses')
+        show_only = st.checkbox('Montrer seulement les universités avec les sujets choisis')
         if show_only == True:
             unis_merged = unis_merged[unis_merged['frequence'] == len(kws)]
         else:
@@ -178,11 +176,11 @@ def user():
         temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
         #unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
         unis_merged.sort_values(by='frequence', ascending=False,inplace=True)
-        unis_merged.drop(['keywords','keywords_raw']+filt_list,axis=1,inplace=True)
+        unis_merged.drop(['keywords','keywords_raw','liens']+filt_list,axis=1,inplace=True)
         unis_merged_xlsx = to_excel(unis_merged.drop('frequence',axis=1))
-        st.download_button(label='Download Current table of data',data=unis_merged_xlsx ,file_name= f'unversites_user{kws}.xlsx')
-        if toggle_list[2] == False:
-            unis_merged['liens'] = unis_merged['liens'].apply(make_clickable)
+        st.download_button(label='Installer les données',data=unis_merged_xlsx ,file_name= f'unversites_user{kws}.xlsx')
+        #if toggle_list[2] == False:
+            #unis_merged['liens'] = unis_merged['liens'].apply(make_clickable)
         unis_merged['frequence'] = unis_merged['frequence'].apply(lambda x: str(int(x))+'/'+str(len(kws)))
         unis_merged.set_index(np.arange(1,len(unis_merged)+1),inplace=True)
         unis_merged_html = unis_merged.to_html(escape=False)
@@ -231,24 +229,22 @@ def similar():
 
     if len(unis_vect_chose) >0:
 
-        col1, col2, col3, col4, space = st.columns([0.6,1,1,1,16-4])
+        col1, col2, col3, space = st.columns([0.6,1,1,16-4])
         with col1:
             st.write("""Hide:""")
         with col2:
             adresse = st.checkbox('adresse')
         with col3:
             details = st.checkbox('details')
-        with col4:
-            liens = st.checkbox('liens')
         with space:
             pass
-        toggle_list = [adresse,details,liens]
-        filt_list = list(compress(['adresse','details','liens'], toggle_list))
+        toggle_list = [adresse,details]
+        filt_list = list(compress(['adresse','details'], toggle_list))
 
-        unis_vect_chose.drop(['keywords','keywords_raw','unvectored']+filt_list,axis=1,inplace=True)
+        unis_vect_chose.drop(['keywords','keywords_raw','unvectored','liens']+filt_list,axis=1,inplace=True)
         unis_vect_xlsx = to_excel(unis_vect_chose)
-        if toggle_list[2] == False:
-            unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
+        #if toggle_list[2] == False:
+            #unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
         unis_vect_chose.set_index(np.arange(1,len(unis_vect_chose)+1),inplace=True)
         unis_vect_chose_html = unis_vect_chose.to_html(escape=False)
         st.download_button(label='Download Current table of data',data=unis_vect_xlsx ,file_name= f'similar_universities_{choose}.xlsx')
@@ -260,23 +256,48 @@ def similar():
 
 
 
+def orientation():
+    st.write("""# Trouvez un conseiller d'orientation""")
+    col1, col2 = st.columns(2)
+    with col2:
+        st.header("Comment ça marche ?")
+        st.write("""Faites un appel par téléphone ou Whatsapp 1 à 1 avec un conseiller d'orientation pour des questions et des conseils sur votre parcours et choix unviersitaires. """)
+        st.image('whatsapp.png',width=100)
+        st.write("""Session d'orientation à 3000 et plus de plans offerts pour un suivi continu""")
+        st.image('omw.png')
+        st.header("Astuces pour choisir le parcours qui vous conviennent")
+        st.markdown("""1. Décidez de la carrière que vous souhaitez
+2. Découvrez quelle(s) matière(s) vous devez étudier
+3. Découvrez où vous pouvez étudier
+4. Décidez comment vous souhaitez étudier (à temps plein, à temps partiel, à distance)
+5. Vérifiez que le cours d'accès à l'enseignement supérieur que vous avez choisi répond aux conditions d'entrée à l'université""")
+
+    with col1:
+        st.header("Organiser une session")
+        html_string = '<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScTs2q3N6gi3L8f2IJS0nLXf2HL_EwgY9zTIEmDwTbuP87acQ/viewform?embedded=true" width="640" height="1893" frameborder="0" marginheight="0" marginwidth="0">Chargement…</iframe>'
+        st.markdown(html_string, unsafe_allow_html=True)
+    st.write("""Pour plus d'aide, veuillez contacter le numéro Whatsapp ou l'adesse mail ci dessous""")
+    st.write("https://wa.me/777751848")
+    st.write("awtcanada@gmail.com")
+
+
 with st.sidebar:
     selected = option_menu(
         menu_title='Orientation SN',
-        options=["User", 'Similar Universities', 'Info'],
+        options=["Chercher","S'orienter", 'Universités similaires (Beta)'],
         icons=['house', 'cloud-upload','water'],
-        menu_icon='wifi',
         default_index=0
         )
 
 
 
-if selected == "User":
+if selected == "Chercher":
     user()
-if selected == "Similar Universities":
+if selected == "S'orienter":
+    orientation()
+if selected == "Universités similaires (Beta)":
     similar()
-if selected == "Info":
-    main()
+
 
 
 
