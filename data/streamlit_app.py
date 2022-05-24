@@ -1,6 +1,6 @@
 import streamlit as st
 import numpy as np
-from data.main import *
+from main import *
 from streamlit_option_menu import option_menu
 from itertools import compress
 from io import BytesIO
