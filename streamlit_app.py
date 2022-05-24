@@ -257,10 +257,10 @@ def similar():
 
 
 def orientation():
-    st.image("corpo.png",width=200)
     st.write("""# Trouvez un conseiller d'orientation""")
     col1, col2 = st.columns(2)
     with col2:
+        st.image("corpo.png",width=200)
         st.header("Comment ça marche ?")
         st.write("""Faites un appel par téléphone ou Whatsapp 1 à 1 avec un conseiller d'orientation pour des questions et des conseils sur votre parcours et choix unviersitaires. """)
         st.image('whatsapp.png',width=100)
