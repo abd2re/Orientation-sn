@@ -13,7 +13,7 @@ from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise  import cosine_similarity
 
-st.set_page_config(page_title="Universties Senegal",layout="wide")
+st.set_page_config(page_title="Orientation SN",layout="wide")
 
 def make_clickable(link):
     try:
