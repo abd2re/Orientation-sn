@@ -271,10 +271,11 @@ def orientation():
 3. Découvrez où vous pouvez étudier
 4. Décidez comment vous souhaitez étudier (à temps plein, à temps partiel, à distance)
 5. Vérifiez que le cours d'accès à l'enseignement supérieur que vous avez choisi répond aux conditions d'entrée à l'université""")
-        st.image("corpo.png",width=600)
+        st.image("sit.png",width=600)
 
     with col1:
         st.header("Organiser une session")
+        st.image("corpo.png",width=500)
         html_string = '<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScTs2q3N6gi3L8f2IJS0nLXf2HL_EwgY9zTIEmDwTbuP87acQ/viewform?embedded=true" width="640" height="1893" frameborder="0" marginheight="0" marginwidth="0">Chargement…</iframe>'
         st.markdown(html_string, unsafe_allow_html=True)
 
