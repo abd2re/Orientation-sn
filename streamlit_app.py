@@ -260,7 +260,6 @@ def orientation():
     st.write("""# Trouvez un conseiller d'orientation""")
     col1, col2 = st.columns(2)
     with col2:
-        st.image("corpo.png",width=200)
         st.header("Comment ça marche ?")
         st.write("""Faites un appel par téléphone ou Whatsapp 1 à 1 avec un conseiller d'orientation pour des questions et des conseils sur votre parcours et choix unviersitaires. """)
         st.image('whatsapp.png',width=100)
@@ -278,6 +277,7 @@ def orientation():
         st.header("Organiser une session")
         html_string = '<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScTs2q3N6gi3L8f2IJS0nLXf2HL_EwgY9zTIEmDwTbuP87acQ/viewform?embedded=true" width="640" height="1893" frameborder="0" marginheight="0" marginwidth="0">Chargement…</iframe>'
         st.markdown(html_string, unsafe_allow_html=True)
+        st.image("corpo.png",width=500)
 
     st.write("""Pour plus d'aide, veuillez contacter le numéro Whatsapp ou l'adesse mail ci dessous""")
     st.write("https://wa.me/777751848")
