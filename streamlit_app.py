@@ -177,7 +177,7 @@ def user():
         temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
         #unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
         unis_merged.sort_values(by='frequence', ascending=False,inplace=True)
-        unis_merged.drop(['keywords','liens','unvectored']+filt_list,axis=1,inplace=True)
+        unis_merged.drop(['keywords','liens']+filt_list,axis=1,inplace=True)
         unis_merged_xlsx = to_excel(unis_merged.drop('frequence',axis=1))
         st.download_button(label='Installer les données',data=unis_merged_xlsx ,file_name= f'unversites_user{kws}.xlsx')
         #if toggle_list[2] == False:
