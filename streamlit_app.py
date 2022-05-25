@@ -172,7 +172,7 @@ def user():
             if i == len(kws):
                 break
         else:
-            st.write("*No matches for these subjects*")
+            st.write("*Pas de résultats*")
         temp_freq_values = pd.DataFrame(freq_values).transpose().dropna().values.tolist()
         temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
         #unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
