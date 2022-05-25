@@ -21,6 +21,7 @@ import os
 #except:
 #    pass
 unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
+
 unis.drop('Unnamed: 0',axis=1,inplace=True)
 unis["nom"] = unis["nom"]
 unis["adresse"] = unis["adresse"]
@@ -70,7 +71,6 @@ for i in details_mod:
     keywords.append(list(set(temp_key)))
 
 unis['keywords'] = keywords
-unis.drop([89,90,91,92,93],axis=0,inplace=True)
 links = []
 
 if os.path.exists('unis_links') == False:
@@ -85,8 +85,9 @@ unis['liens'] = pd.read_csv('unis_links')['liens']
 
 keyword_dict = dict(zip(keyword_series['keyword'],keyword_series['count']))
 
+
+
+
+
+
 print(unis)
-
-
-
-
