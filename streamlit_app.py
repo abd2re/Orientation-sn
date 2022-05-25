@@ -106,7 +106,7 @@ def main():
         pass
     toggle_list = [adresse,details,liens,keywords]
     filt_list = list(compress(['adresse','details','liens','keywords'], toggle_list))
-    unis_filt.drop(['keywords_raw']+filt_list,axis=1,inplace=True)
+    #unis_filt.drop(['keywords_raw']+filt_list,axis=1,inplace=True)
     if toggle_list[2] == False:
         unis_filt['liens'] = unis_filt['liens'].apply(make_clickable)
     unis_filt = unis_filt.to_html(escape=False)
@@ -242,7 +242,7 @@ def similar():
         toggle_list = [adresse,details]
         filt_list = list(compress(['adresse','details'], toggle_list))
 
-        unis_vect_chose.drop(['keywords','keywords_raw','unvectored','liens']+filt_list,axis=1,inplace=True)
+        unis_vect_chose.drop(['keywords','unvectored','liens']+filt_list,axis=1,inplace=True)
         unis_vect_xlsx = to_excel(unis_vect_chose)
         #if toggle_list[2] == False:
             #unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
