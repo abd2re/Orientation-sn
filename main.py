@@ -62,7 +62,7 @@ for i in unis['details'].str.lower():
 unis['keywords_raw'] = details_mod
 unis.drop(unis.iloc[:, 3:11], inplace = True, axis = 1)
 keywords = []
-for i in unis['keywords_raw']:
+for i in details_mod:
     temp_key = []
     for word in i.split():
         if word in keyword_series.iloc[:,0].values:
@@ -70,7 +70,7 @@ for i in unis['keywords_raw']:
     keywords.append(list(set(temp_key)))
 
 unis['keywords'] = keywords
-unis.drop([89,90,91,92,93,94],axis=0,inplace=True)
+unis.drop([89,90,91,92,93],axis=0,inplace=True)
 links = []
 
 if os.path.exists('unis_links') == False:
