@@ -1,4 +1,5 @@
-# abd2re-university-sn-dataframe
-Application for universities in Senegal with automatic keywords selection/indexing, using Python, Pandas and Scikit Learn Library
+# Orientation SN
+
+Orientation platform for senegealese unviersities
 
 https://share.streamlit.io/abd2re/orientation-sn/main
