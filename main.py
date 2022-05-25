@@ -3,23 +3,23 @@ import requests
 from googlesearch import search
 import os
 
-try:
-    unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
-    url_link = 'https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/'
-    r = requests.get(url_link,headers ={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'})
-    unis = pd.read_html(r.text)[0]
-    unis = unis.transpose()
-    unis.drop(0,axis=1,inplace=True)
-    unis.set_index(1,inplace=True)
-    unis = unis.transpose()
-    unis.reset_index(inplace=True)
-    unis.drop('index',axis=1,inplace=True)
-    unis.columns = ['nom', 'adresse', 'details[1]', 'details']
-    unis.dropna(thresh=3,inplace=True)
-    unis.drop('details[1]',axis=1,inplace=True)
-    unis.to_excel('unis_output.xlsx')
-except:
-    pass
+#try:
+#    unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
+#    url_link = 'https://infoetudes.com/liste-adresses-et-contacts-des-universites-ecoles-de-formations-et-instituts-du-senegal/'
+#    r = requests.get(url_link,headers ={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'})
+#    unis = pd.read_html(r.text)[0]
+#    unis = unis.transpose()
+#    unis.drop(0,axis=1,inplace=True)
+#    unis.set_index(1,inplace=True)
+#    unis = unis.transpose()
+#    unis.reset_index(inplace=True)
+#    unis.drop('index',axis=1,inplace=True)
+#    unis.columns = ['nom', 'adresse', 'details[1]', 'details']
+#    unis.dropna(thresh=3,inplace=True)
+#    unis.drop('details[1]',axis=1,inplace=True)
+#    unis.to_excel('unis_output.xlsx')
+#except:
+#    pass
 unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
 unis.drop('Unnamed: 0',axis=1,inplace=True)
 unis["nom"] = unis["nom"]
