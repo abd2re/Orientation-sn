@@ -115,7 +115,7 @@ def main():
 def user():
     show_only = True
     st.write("""# Cherchez des univérsités qui vous conviennent""")
-    options = st.multiselect('Choisi tes sujets:',list(keyword_dict.keys()))
+    options = st.multiselect('Choisi tes critères:',list(keyword_dict.keys()))
     kws = options
     itera = 0
     unis_overall = []
@@ -177,7 +177,7 @@ def user():
         temp_freq_values = [' '.join(i).split() for i in temp_freq_values]
         #unis_merged.insert(4,'selection',temp_freq_values[:len(unis_merged['frequence'])])
         unis_merged.sort_values(by='frequence', ascending=False,inplace=True)
-        unis_merged.drop(['keywords','liens']+filt_list,axis=1,inplace=True)
+        unis_merged.drop(['keywords','liens','unvectored']+filt_list,axis=1,inplace=True)
         unis_merged_xlsx = to_excel(unis_merged.drop('frequence',axis=1))
         st.download_button(label='Installer les données',data=unis_merged_xlsx ,file_name= f'unversites_user{kws}.xlsx')
         #if toggle_list[2] == False:
@@ -242,7 +242,7 @@ def similar():
         toggle_list = [adresse,details]
         filt_list = list(compress(['adresse','details'], toggle_list))
 
-        unis_vect_chose.drop(['keywords','unvectored','liens']+filt_list,axis=1,inplace=True)
+        unis_vect_chose.drop(['keywords','liens']+filt_list,axis=1,inplace=True)
         unis_vect_xlsx = to_excel(unis_vect_chose)
         #if toggle_list[2] == False:
             #unis_vect_chose['liens'] = unis_vect_chose['liens'].apply(make_clickable)
@@ -263,22 +263,22 @@ def orientation():
     with col2:
         st.header("Comment ça marche ?")
         st.write("""Faites un appel par téléphone ou Whatsapp 1 à 1 avec un conseiller d'orientation pour des questions et des conseils sur votre parcours et choix unviersitaires. """)
-        st.image('whatsapp.png',width=100)
+        st.image('images/whatsapp.png',width=100)
         st.write("""Session d'orientation à 3000 fcfa et plus de plans offerts pour un suivi continu""")
-        st.image('omw.png')
+        st.image('images/omw.png')
         st.header("Astuces pour choisir le parcours qui vous conviennent")
         st.markdown("""1. Décidez de la carrière que vous souhaitez
 2. Découvrez quelle(s) matière(s) vous devez étudier
 3. Découvrez où vous pouvez étudier
 4. Décidez comment vous souhaitez étudier (à temps plein, à temps partiel, à distance)
 5. Vérifiez que le cours d'accès à l'enseignement supérieur que vous avez choisi répond aux conditions d'entrée à l'université""")
-        st.image("sit.png",width=450)
+        st.image("images/sit.png",width=450)
 
     with col1:
         st.header("Organiser une session")
         html_string = '<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScTs2q3N6gi3L8f2IJS0nLXf2HL_EwgY9zTIEmDwTbuP87acQ/viewform?embedded=true" width="640" height="1893" frameborder="0" marginheight="0" marginwidth="0">Chargement…</iframe>'
         st.markdown(html_string, unsafe_allow_html=True)
-        st.image("corpo.png",width=500)
+        st.image("images/corpo.png",width=500)
 
     st.write("""Pour plus d'aide, veuillez contacter le numéro Whatsapp ou l'adesse mail ci dessous""")
     st.write("https://wa.me/777751848")

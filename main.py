@@ -1,7 +1,12 @@
 import pandas as pd
 import requests
+from itertools import chain
 from googlesearch import search
 import os
+import simplemma as splm
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
 
 #try:
 #    unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
@@ -20,7 +25,7 @@ import os
 #    unis.to_excel('unis_output.xlsx')
 #except:
 #    pass
-unis = pd.read_excel('unis_output_cor.xlsx','Sheet1')
+unis = pd.read_excel('unis.xlsx','Sheet1')
 
 unis.drop('Unnamed: 0',axis=1,inplace=True)
 unis["nom"] = unis["nom"]
@@ -42,28 +47,45 @@ for i in keyword_list:
     if i[-1] == 's': i = i[:-1]
     if len(i) > 2:
         new_keyword_list.append(i)
-keyword_series = pd.Series(new_keyword_list)
+
+
+langdata = splm.load_data('fr')
+stop_words = set(stopwords.words('french'))
+
+unvect = []
+for i in unis['details']:
+    word_tokens = word_tokenize(i)
+    filtered_sentence = []
+    for w in word_tokens:
+        if w not in stop_words and len(w)>1:
+            filtered_sentence.append(splm.lemmatize(w, langdata))
+
+    sent = ' '.join(filtered_sentence)
+    unvect.append(sent)
+
+unis['unvectored'] = unvect
+unis['unvectored'].mask(unis['unvectored'] == '',inplace=True)
+
+unique_words = list(chain(*[unvect[i].split(" ") for i in range(len(unvect))]))
+
+#print(unique_words)
+
+keyword_series = pd.Series(unique_words)
 keyword_series.value_counts().to_csv('keywordlist')
+keyword_series = pd.read_csv('keywordlist')
 
+keyword_series = keyword_series[keyword_series['0']>1]
 
-keyword_series = pd.read_csv('keywordlist_cor.txt')
-details_mod = []
-for i in unis['details'].str.lower():
-    phrase = ''
-    i = i.replace(",","")
-    i = i.replace(".","")
-    i = i.replace("…","")
-    i = i.replace("’", " ")
-    i = i.replace("/", " ")
-    for word in i.split():
-        if word[-1] == 's':
-            word = word[:-1]
-        phrase = phrase +''.join(word) + ' '
-    details_mod.append(phrase)
-unis['keywords_raw'] = details_mod
-unis.drop(unis.iloc[:, 3:11], inplace = True, axis = 1)
+#for i in keyword_series['0']:
+#    print(i)
+
+#print(keyword_series)
+#unis.drop(unis.iloc[:, 3:11], inplace = True, axis = 1)
 keywords = []
-for i in details_mod:
+
+print(unis['unvectored'])
+
+for i in unvect:
     temp_key = []
     for word in i.split():
         if word in keyword_series.iloc[:,0].values:
@@ -83,11 +105,11 @@ if os.path.exists('unis_links') == False:
 
 unis['liens'] = pd.read_csv('unis_links')['liens']
 
-keyword_dict = dict(zip(keyword_series['keyword'],keyword_series['count']))
+keyword_dict = dict(zip(keyword_series['Unnamed: 0'],keyword_series['0']))
+
+#print(keyword_series)
 
 
 
 
 
-
-print(unis)
