@@ -14,6 +14,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise  import cosine_similarity
 
 st.set_page_config(page_title="Orientation SN",layout="wide",page_icon="images/orientation_logo_1.png")
+primary_clr = st.get_option('theme.primaryColor')
+base = st.get_option('theme.base')
+
 
 def make_clickable(link):
     try:
