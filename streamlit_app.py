@@ -286,11 +286,11 @@ def orientation():
 
 with st.sidebar:
     st.image('images/orientation_logo (2).png')
+    st.text(' ')
     selected = option_menu(
         menu_title='',
         options=["Chercher","S'orienter", 'Universités similaires (Beta)'],
-        menu_icon='images/orientation_logo_1.png',
-        icons=['house', 'cloud-upload','water'],
+        icons=['search', 'house','moon-stars'],
         default_index=0
         )
 
