@@ -74,8 +74,8 @@ keyword_series = pd.Series(unique_words)
 keyword_series.value_counts().to_csv('keywordlist')
 keyword_series = pd.read_csv('keywordlist')
 
-keyword_series = keyword_series[(keyword_series['0']>1) & (len(keyword_series['Unnamed: 0']) > 2)]
-
+keyword_series = keyword_series[keyword_series['0']>1]
+print(keyword_series['Unnamed: 0'])
 #for i in keyword_series['0']:
 #    print(i)
 

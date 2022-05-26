@@ -13,7 +13,7 @@ from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise  import cosine_similarity
 
-st.set_page_config(page_title="Orientation SN",layout="wide",page_icon="images/red.png")
+st.set_page_config(page_title="Orientation SN",layout="wide",page_icon="images/orientation_logo_1.png")
 
 def make_clickable(link):
     try:
@@ -285,9 +285,11 @@ def orientation():
     st.write("awtcanada@gmail.com")
 
 with st.sidebar:
+    st.image('images/orientation_logo (2).png')
     selected = option_menu(
-        menu_title='Orientation SN',
+        menu_title='',
         options=["Chercher","S'orienter", 'Universités similaires (Beta)'],
+        menu_icon='images/orientation_logo_1.png',
         icons=['house', 'cloud-upload','water'],
         default_index=0
         )
