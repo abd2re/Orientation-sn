@@ -289,7 +289,7 @@ def orientation():
 
 def article():
         st.header("Astuces pour choisir le parcours qui vous conviennent")
-        st.image('images/search.png')
+        st.image('images/search.png',width=500)
         st.markdown("""1. Décidez de la carrière que vous souhaitez
 2. Découvrez quelle(s) matière(s) vous devez étudier
 3. Découvrez où vous pouvez étudier
