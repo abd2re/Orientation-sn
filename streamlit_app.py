@@ -300,7 +300,7 @@ with st.sidebar:
     st.text(' ')
     selected = option_menu(
         menu_title='',
-        options=["Chercher","S'orienter", 'Universités similaires (Beta)','Articles','Forum'],
+        options=["Chercher","S'orienter",'Articles','Forum','Universités similaires (Beta)'],
         icons=['search', 'house','book','card-list','moon-stars'],
         default_index=0
         )
