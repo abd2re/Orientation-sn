@@ -292,8 +292,8 @@ with st.sidebar:
     st.text(' ')
     selected = option_menu(
         menu_title='',
-        options=["Chercher","S'orienter", 'Universités similaires (Beta)'],
-        icons=['search', 'house','moon-stars'],
+        options=["Chercher","S'orienter", 'Universités similaires (Beta)','Articles','Forum'],
+        icons=['search', 'house','book','card-list','moon-stars'],
         default_index=0
         )
 
