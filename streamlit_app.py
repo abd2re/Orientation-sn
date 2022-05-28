@@ -13,6 +13,7 @@ from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise  import cosine_similarity
 
+
 st.set_page_config(page_title="Orientation SN",layout="wide",page_icon="images/orientation_logo_1.png")
 primary_clr = st.get_option('theme.primaryColor')
 base = st.get_option('theme.base')
@@ -296,6 +297,12 @@ def article():
 4. Décidez comment vous souhaitez étudier (à temps plein, à temps partiel, à distance)
 5. Vérifiez que le cours d'accès à l'enseignement supérieur que vous avez choisi répond aux conditions d'entrée à l'université""")
 
+
+#def forum():
+    #st_disqus("streamlit-disqus-demo")
+
+
+
 with st.sidebar:
     st.image('images/orientation_logo (2).png')
     st.text(' ')
@@ -316,6 +323,5 @@ if selected == "Universités similaires (Beta)":
     similar()
 if selected == "Articles":
     article()
-
 
 

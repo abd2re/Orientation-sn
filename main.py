@@ -1,4 +1,5 @@
 import pandas as pd
+import nltk
 import requests
 from itertools import chain
 from googlesearch import search
@@ -6,6 +7,7 @@ import os
 import simplemma as splm
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+nltk.download('stopwords')
 
 
 #try:
