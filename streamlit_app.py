@@ -287,6 +287,14 @@ def orientation():
     st.write("https://wa.me/777751848")
     st.write("awtcanada@gmail.com")
 
+def article():
+        st.header("Astuces pour choisir le parcours qui vous conviennent")
+        st.markdown("""1. Décidez de la carrière que vous souhaitez
+2. Découvrez quelle(s) matière(s) vous devez étudier
+3. Découvrez où vous pouvez étudier
+4. Décidez comment vous souhaitez étudier (à temps plein, à temps partiel, à distance)
+5. Vérifiez que le cours d'accès à l'enseignement supérieur que vous avez choisi répond aux conditions d'entrée à l'université""")
+
 with st.sidebar:
     st.image('images/orientation_logo (2).png')
     st.text(' ')
@@ -305,7 +313,8 @@ if selected == "S'orienter":
     orientation()
 if selected == "Universités similaires (Beta)":
     similar()
-
+if selected == "Articles":
+    article()
 
 
 
