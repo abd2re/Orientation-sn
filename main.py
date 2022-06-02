@@ -8,6 +8,7 @@ import simplemma as splm
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 nltk.download('stopwords')
+nltk.download('punkt')
 
 
 #try:
