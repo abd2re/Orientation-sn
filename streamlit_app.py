@@ -192,7 +192,7 @@ def user():
         st.write(unis_merged_html, unsafe_allow_html=True)
 
 def similar():
-    st.write("""# Find similar universities""")
+    st.write("""# Trouver des universités similaires""")
     langdata = splm.load_data('fr')
     stop_words = set(stopwords.words('french'))
 
@@ -225,7 +225,7 @@ def similar():
 
 
     val = pd.Series(unis_vect.index,unis_vect['nom']).to_dict()
-    choose = st.selectbox('Search University',val)
+    choose = st.selectbox('Chercher une université',val)
     i = val[choose]
     unis_vect['cos_sim score'] = similarity_fulldf[i]
     unis_vect_chose = unis_vect.loc[similarity_fulldf[i][similarity_fulldf[i]>0.56].sort_values(ascending=False).index]
