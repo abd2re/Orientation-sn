@@ -299,11 +299,11 @@ def article():
 
         st.header("Six conseils pour trouver votre cheminement de carrière")
         st.image("images/corpo.png",width=500)
-        st.markdown("""1. Rappelez-vous : Les possibilités sont infinies. ...
-2. Trouvez votre passion. ...
-3. Prioriser l'éducation et le développement personnel. ...
-4. Lâchez les croyances limitantes. ...
-5. Concentrez-vous sur l'expérience plutôt que sur le prestige. ...
+        st.markdown("""1. Rappelez-vous : Les possibilités sont infinies.
+2. Trouvez votre passion.
+3. Prioriser l'éducation et le développement personnel.
+4. Lâchez les croyances limitantes.
+5. Concentrez-vous sur l'expérience plutôt que sur le prestige.
 6. Soyez adaptable.""")
 
 
@@ -317,8 +317,8 @@ with st.sidebar:
     st.text(' ')
     selected = option_menu(
         menu_title='',
-        options=["Chercher","S'orienter",'Articles','Forum','Universités similaires (Beta)'],
-        icons=['search', 'house','book','card-list','moon-stars'],
+        options=["Chercher","S'orienter",'Articles','Universités similaires (Beta)'],
+        icons=['search', 'house','book','moon-stars'],
         default_index=0
         )
 
